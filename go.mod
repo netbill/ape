@@ -1,4 +1,4 @@
-module github.com/umisto/ape
+module github.com/netbill/ape
 
 go 1.24.4
 
