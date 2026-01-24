@@ -12,12 +12,15 @@ import (
 	"github.com/google/jsonapi"
 )
 
-func Render(w http.ResponseWriter, status int, res interface{}) {
+func Render(w http.ResponseWriter, status int, res ...interface{}) {
 	w.Header().Set("content-type", jsonapi.MediaType)
 	w.WriteHeader(status)
-	err := json.NewEncoder(w).Encode(res)
-	if err != nil {
-		panic(fmt.Errorf("failed to render response %w", err))
+
+	if res != nil && len(res) > 0 {
+		err := json.NewEncoder(w).Encode(res)
+		if err != nil {
+			panic(fmt.Errorf("failed to render response %w", err))
+		}
 	}
 }
 
@@ -53,7 +56,7 @@ func RenderErr(w http.ResponseWriter, errs ...*jsonapi.ErrorObject) {
 	w.Header().Set("Content-Type", jsonapi.MediaType)
 	w.WriteHeader(status)
 
-	if err := jsonapi.MarshalErrors(w, objs); err != nil {
+	if err = jsonapi.MarshalErrors(w, objs); err != nil {
 		log.Printf("Failed to marshal errors: %v", err)
 	}
 }

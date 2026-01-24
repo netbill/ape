@@ -5,41 +5,41 @@ import (
 )
 
 type Error struct {
-	// ID unique error identifier
+	// id unique error identifier
 	// in uppercase format like "ADMIN_CAN_NOT_DELETE_SELF"
-	ID string
+	id string
 
 	// internal error which caused this error
-	Cause error
+	cause error
 }
 
 func (e *Error) Error() string {
 	if e == nil {
 		return "<nil>"
 	}
-	if e.Cause != nil {
-		return e.Cause.Error()
+	if e.cause != nil {
+		return e.cause.Error()
 	}
-	return e.ID
+	return e.id
 }
 
 func (e *Error) Is(target error) bool {
 	var be *Error
 	if errors.As(target, &be) {
-		return e.ID == be.ID
+		return e.id == be.id
 	}
 	return false
 }
 
 func (e *Error) Raise(cause error) error {
 	return &Error{
-		ID:    e.ID,
-		Cause: cause,
+		id:    e.id,
+		cause: cause,
 	}
 }
 
-func DeclareError(ID string) *Error {
+func DeclareError(id string) *Error {
 	return &Error{
-		ID: ID,
+		id: id,
 	}
 }
